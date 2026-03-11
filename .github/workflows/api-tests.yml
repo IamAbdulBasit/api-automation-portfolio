@@ -6,6 +6,7 @@ on:
     paths:
       - 'BookerCollection.json'
       - 'BookerEnvironment.json'
+  workflow_dispatch:   # ← manual trigger button (no paths filter needed here)
 
 jobs:
   test:
