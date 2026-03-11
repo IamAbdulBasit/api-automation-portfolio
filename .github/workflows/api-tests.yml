@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'BookerCollection.json'
-      - 'BookerEnvironment.json'
+      - 'api-automation-postman/BookerCollection.json'
+      - 'api-automation-postman/BookerEnvironment.json'
   workflow_dispatch:
 
 jobs:
@@ -21,8 +21,9 @@ jobs:
 
       - name: Run API Tests
         run: |
-          newman run BookerCollection.json \
-            -e BookerEnvironment.json \
+          mkdir -p reports
+          newman run api-automation-postman/BookerCollection.json \
+            -e api-automation-postman/BookerEnvironment.json \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export reports/report.html
 
