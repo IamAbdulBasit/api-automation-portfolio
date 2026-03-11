@@ -1,1 +1,32 @@
+name: API Tests
 
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'BookerCollection.json'
+      - 'BookerEnvironment.json'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Newman
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+      - name: Run API Tests
+        run: |
+          newman run BookerCollection.json \
+            -e BookerEnvironment.json \
+            --reporters cli,htmlextra \
+            --reporter-htmlextra-export reports/report.html
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-test-report
+          path: reports/report.html
