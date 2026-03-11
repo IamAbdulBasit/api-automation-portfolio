@@ -6,13 +6,13 @@ on:
     paths:
       - 'BookerCollection.json'
       - 'BookerEnvironment.json'
-  workflow_dispatch:   # ← manual trigger button (no paths filter needed here)
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Newman
         run: |
@@ -27,7 +27,7 @@ jobs:
             --reporter-htmlextra-export reports/report.html
 
       - name: Upload Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: api-test-report
           path: reports/report.html
