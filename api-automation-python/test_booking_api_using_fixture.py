@@ -102,3 +102,26 @@ def test_delete_booking(auth_token, created_booking_id):
     }
     response = requests.delete(f"{BASE_URL}/booking/{created_booking_id}", headers=headers)
     assert response.status_code == 201
+
+def test_get_deleted_booking(created_booking_id):
+    response = requests.get(f"{BASE_URL}/booking/{created_booking_id}")
+    assert response.status_code == 404, "Deleted booking should not be retrievable"
+
+def test_xml_api_test():
+    headers = {
+        "Content-Type": "text/xml"
+    }
+    payload = """<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <Add xmlns="http://tempuri.org/">
+            <intA>5</intA>
+            <intB>10</intB>
+        </Add>
+    </soap:Body>
+</soap:Envelope>"""
+    response = requests.post("http://www.dneonline.com/calculator.asmx", headers=headers, data=payload)
+    assert response.status_code == 200
+    assert response.headers["Content-Type"] == "application/xml; charset=utf-8"
+    assert "<AddResult>15</AddResult>" in response.text, "Expected result of 5 + 10 should be 15"
+    assert "<AddResult>20</AddResult>" not in response.text, "Unexpected result of 5 + 10 should not be 20"
